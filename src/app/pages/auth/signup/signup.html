@@ -1,0 +1,143 @@
+<section class="container py-5">
+	<div class="row justify-content-center">
+		<div class="col-12 col-lg-9 col-xl-8">
+			<div class="card shadow-sm border-0 signup-card">
+				<div class="card-body p-4 p-md-5">
+					<h1 class="h3 mb-2 text-center">Create Your Account</h1>
+					<p class="text-muted text-center mb-4">Join Book Store and start buying your favorite books.</p>
+
+                    @if (submitted() && signupForm.invalid) {
+                        <div class="alert alert-danger" role="alert">
+                            Please fill all required fields correctly before submitting the form
+                        </div>
+                    }
+
+                    @if (submitError()) {
+                        <div class="alert alert-danger" role="alert">
+                            {{submitError()}}
+                        </div>
+                    }
+
+                    @if (submitSuccess()) {
+                        <div class="alert alert-success" role="alert">
+                            {{submitSuccess()}}
+                        </div>
+                    }
+					<form [formGroup]="signupForm" (ngSubmit)="onSubmit()" novalidate>
+						<div class="row g-3">
+							<div class="col-12 col-md-6">
+								<label for="first-name" class="form-label">First Name</label>
+								<input id="first-name" type="text" class="form-control" formControlName="first_name" [class.is-invalid]="isInvalid('first_name')" placeholder="Enter first name" autocomplete="given-name" />
+								@if (isInvalid('first_name')) { <div class="invalid-feedback">First name is required and must have at least 2 characters.</div> }
+							</div>
+
+							<div class="col-12 col-md-6">
+								<label for="last-name" class="form-label">Last Name</label>
+								<input id="last-name" type="text" class="form-control" formControlName="last_name" [class.is-invalid]="isInvalid('last_name')" placeholder="Enter last name" autocomplete="family-name" />
+								@if (isInvalid('last_name')) { <div class="invalid-feedback">Last name is required and must have at least 2 characters.</div> }
+							</div>
+
+							<div class="col-12 col-md-6">
+								<label for="email" class="form-label">Email</label>
+								<input id="email" type="email" class="form-control" formControlName="email" [class.is-invalid]="isInvalid('email')" placeholder="Enter email address" autocomplete="email" />
+								@if (isInvalid('email')) { <div class="invalid-feedback">Enter a valid email address.</div> }
+							</div>
+
+							<div class="col-12 col-md-6">
+								<label for="mobile-number" class="form-label">Mobile Number</label>
+								<input
+									id="mobile-number"
+									type="tel"
+									class="form-control"
+									formControlName="mobile_number"
+									[class.is-invalid]="isInvalid('mobile_number')"
+									placeholder="Enter primary mobile number"
+									autocomplete="tel"
+									inputmode="numeric"
+									pattern="[0-9]{10}"
+								/>
+								@if (isInvalid('mobile_number')) { <div class="invalid-feedback">Enter a valid 10-digit mobile number.</div> }
+							</div>
+
+							<div class="col-12 col-md-6">
+								<label for="secondary-mobile-number" class="form-label">Secondary Mobile Number</label>
+								<input
+									id="secondary-mobile-number"
+									type="tel"
+									class="form-control"
+									formControlName="secondary_mobile_number"
+									[class.is-invalid]="isInvalid('secondary_mobile_number')"
+									placeholder="Enter secondary mobile number"
+									autocomplete="tel-national"
+									inputmode="numeric"
+									pattern="[0-9]{10}"
+								/>
+								@if (isInvalid('secondary_mobile_number')) { <div class="invalid-feedback">Enter a valid 10-digit number or leave blank.</div> }
+							</div>
+
+							<div class="col-12 col-md-6">
+								<label for="gender" class="form-label">Gender</label>
+								<select id="gender" class="form-select" formControlName="gender" [class.is-invalid]="isInvalid('gender')">
+									<option value="" disabled>Select gender</option>
+									<option value="male">Male</option>
+									<option value="female">Female</option>
+									<option value="non-binary">Non-binary</option>
+									<option value="prefer-not-to-say">Prefer not to say</option>
+								</select>
+								@if (isInvalid('gender')) { <div class="invalid-feedback">Please select a gender.</div> }
+							</div>
+
+							<div class="col-12 col-md-6">
+								<label for="password" class="form-label">Password</label>
+								<input
+									id="password"
+									type="password"
+									class="form-control"
+									formControlName="password"
+									[class.is-invalid]="isInvalid('password')"
+									placeholder="Create password"
+									autocomplete="new-password"
+								/>
+								@if (isInvalid('password')) { <div class="invalid-feedback">Password must be at least 8 characters.</div> }
+							</div>
+
+							<div class="col-12 col-md-6">
+								<label for="confirm-password" class="form-label">Confirm Password</label>
+								<input
+									id="confirm-password"
+									type="password"
+									class="form-control"
+									formControlName="confirm_password"
+									[class.is-invalid]="isInvalid('confirm_password') || (submitted() && signupForm.hasError('passwordMismatch'))"
+									placeholder="Confirm password"
+									autocomplete="new-password"
+								/>
+								@if (isInvalid('confirm_password')) { <div class="invalid-feedback">Confirm password is required.</div> }
+								@else if (submitted() && signupForm.hasError('passwordMismatch')) { <div class="invalid-feedback">Passwords do not match.</div> }
+							</div>
+
+							<div class="col-12">
+								<div class="form-check mt-1">
+									<input class="form-check-input" type="checkbox" id="terms" formControlName="terms" [class.is-invalid]="isInvalid('terms')" />
+									<label class="form-check-label" for="terms">
+										I agree to the Terms and Privacy Policy.
+									</label>
+									@if (isInvalid('terms')) { <div class="invalid-feedback d-block">You must accept the terms to continue.</div> }
+								</div>
+							</div>
+						</div>
+
+						<button type="submit" class="btn btn-primary w-100 mt-4" [disabled]="isSubmitting()">
+							{{ isSubmitting() ? 'Creating account...' : 'Create Account' }}
+						</button>
+					</form>
+
+					<div class="d-flex align-items-center justify-content-center gap-2 mt-4">
+						<span class="text-muted">Already have an account?</span>
+						<a routerLink="/login" class="btn btn-outline-primary btn-sm">Login</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>

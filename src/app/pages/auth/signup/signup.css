@@ -1,0 +1,14 @@
+.signup-card {
+	background-color: var(--app-surface);
+	border: 1px solid var(--app-border);
+	border-radius: 1rem;
+}
+
+.form-label,
+.form-check-label {
+	color: var(--app-text);
+}
+
+.form-label {
+	font-weight: 600;
+}

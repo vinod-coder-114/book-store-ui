@@ -1,0 +1,40 @@
+.app-navbar {
+	background-color: var(--app-surface);
+}
+
+.brand-icon {
+	border-radius: 0.4rem;
+	object-fit: cover;
+}
+
+.cart-icon {
+	object-fit: contain;
+}
+
+.nav-link.active {
+	color: var(--app-primary);
+	font-weight: 600;
+}
+
+.nav-search {
+	min-width: min(100%, 18rem);
+}
+
+.cart-link {
+	white-space: nowrap;
+}
+
+.dropdown-menu.show {
+	display: block;
+}
+
+@media (max-width: 991.98px) {
+	.nav-search {
+		width: 100%;
+	}
+
+	.auth-area,
+	.cart-link {
+		width: 100%;
+	}
+}

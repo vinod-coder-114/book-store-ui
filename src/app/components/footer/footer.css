@@ -1,0 +1,31 @@
+.footer-section {
+	background-color: var(--app-surface);
+}
+
+.footer-bottom {
+	border-top: 1px solid var(--app-border);
+	background-color: color-mix(in srgb, var(--app-bg) 70%, white 30%);
+}
+
+.footer-link {
+	color: var(--app-primary);
+	text-decoration: none;
+}
+
+.footer-link:hover,
+.footer-link:focus-visible {
+	color: var(--app-primary-dark);
+	text-decoration: underline;
+}
+
+.footer-icon {
+	width: 1rem;
+	height: 1rem;
+	fill: var(--app-muted);
+	flex: 0 0 auto;
+	margin-top: 0.2rem;
+}
+
+address {
+	font-style: normal;
+}

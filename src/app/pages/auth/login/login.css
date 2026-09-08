@@ -1,0 +1,10 @@
+.login-card {
+	background-color: var(--app-surface);
+	border: 1px solid var(--app-border);
+	border-radius: 1rem;
+}
+
+.form-label {
+	color: var(--app-text);
+	font-weight: 600;
+}

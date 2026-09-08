@@ -1,0 +1,106 @@
+<nav class="navbar navbar-expand-lg border-bottom shadow-sm sticky-top app-navbar" aria-label="Primary navigation">
+	<div class="container">
+		<a class="navbar-brand d-flex align-items-center gap-2 fw-semibold" routerLink="/" (click)="closeMenu(); closeUserMenu()">
+			<img ngSrc="icons/books.png" width="32" height="32" alt="Book Store logo" class="brand-icon" />
+			<span>Book Store</span>
+		</a>
+
+		<button
+			class="navbar-toggler"
+			type="button"
+			aria-controls="mainNavbar"
+			[attr.aria-expanded]="menuOpen()"
+			aria-label="Toggle navigation"
+			(click)="toggleMenu()"
+		>
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="mainNavbar" [class.show]="menuOpen()">
+			<ul class="navbar-nav mx-lg-auto my-2 my-lg-0 gap-lg-2">
+				<li class="nav-item">
+					<a
+						class="nav-link"
+						routerLink="/"
+						routerLinkActive="active"
+						[routerLinkActiveOptions]="{ exact: true }"
+						(click)="closeMenu(); closeUserMenu()"
+					>
+						Home
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" routerLink="/books" routerLinkActive="active" (click)="closeMenu(); closeUserMenu()">Books</a>
+				</li>
+			</ul>
+
+			<div class="ms-lg-auto d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-2 gap-lg-3">
+				<form class="d-flex nav-search" role="search" (submit)="onSearchSubmit($event)">
+					<label class="visually-hidden" for="book-search">Search books</label>
+					<input
+						#searchBox
+						id="book-search"
+						class="form-control"
+						type="search"
+						placeholder="Search books"
+						[value]="searchQuery()"
+						(input)="onSearchInput(searchBox.value)"
+					/>
+					<button class="btn btn-primary ms-2" type="submit">Search</button>
+				</form>
+
+				<a
+					class="btn btn-outline-primary position-relative d-flex align-items-center gap-2 cart-link"
+					routerLink="/cart"
+					(click)="closeMenu(); closeUserMenu()"
+					aria-label="View cart"
+				>
+					<img ngSrc="icons/shopping.png" width="20" height="20" alt="Cart icon" class="cart-icon" />
+					<span>Cart</span>
+					@if (cartCount() > 0) {
+						<span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+							{{ cartCount() }}
+						</span>
+					}
+				</a>
+
+				<div class="auth-area w-100 w-lg-auto">
+					@if (!isLoggedIn()) {
+						<div class="d-flex gap-2 justify-content-start justify-content-lg-end">
+							<a class="btn btn-outline-secondary" routerLink="/login" (click)="closeMenu(); closeUserMenu()">Login</a>
+							<a class="btn btn-primary" routerLink="/signup" (click)="closeMenu(); closeUserMenu()">Signup</a>
+						</div>
+					} @else {
+						<div class="dropdown">
+							<button
+								class="btn btn-outline-secondary dropdown-toggle"
+								type="button"
+								[attr.aria-expanded]="userMenuOpen()"
+								(click)="toggleUserMenu($event)"
+							>
+								{{ userName() }}
+							</button>
+							<ul class="dropdown-menu dropdown-menu-end" [class.show]="userMenuOpen()">
+								<li>
+									<a class="dropdown-item" routerLink="/account" (click)="closeMenu(); closeUserMenu()">Account</a>
+								</li>
+								<li>
+									<a class="dropdown-item" routerLink="/orders" (click)="closeMenu(); closeUserMenu()">Orders</a>
+								</li>
+								@if (canAccessAdmin()) {
+									<li>
+										<a class="dropdown-item" routerLink="/admin/books" (click)="closeMenu(); closeUserMenu()">Admin</a>
+									</li>
+								}
+								<li><hr class="dropdown-divider" /></li>
+								<li>
+									<button type="button" class="dropdown-item text-danger" (click)="logout()">Logout</button>
+								</li>
+							</ul>
+						</div>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</nav>
