@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { Account } from './pages/account/account';
+import { Admin } from './pages/admin/admin';
 import { Cart } from './pages/cart/cart';
 import { Catalog } from './pages/catalog/catalog';
 import { Checkout } from './pages/checkout/checkout';
@@ -27,6 +28,10 @@ export const routes: Routes = [
 	{
 		path: 'account',
 		component: Account,
+	},
+	{
+		path: 'admin/books',
+		component: Admin,
 	},
 	{
 		path: 'login',

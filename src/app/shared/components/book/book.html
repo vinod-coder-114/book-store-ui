@@ -1,1 +1,43 @@
-<p>book works!</p>
+<article class="book-card card border-0 shadow-sm h-100">
+	<div class="cover-area">
+		<img class="book-image" [src]="activeImage()" [alt]="title() + ' cover image'" loading="lazy" />
+
+		<div class="cover-toggle" role="group" aria-label="Toggle book cover side">
+			<button
+				type="button"
+				class="cover-toggle-btn"
+				[class.active]="!showingBackCover()"
+				(click)="showFrontCover()"
+			>
+				<span class="dot" aria-hidden="true"></span>
+				Front
+			</button>
+			<button
+				type="button"
+				class="cover-toggle-btn"
+				[class.active]="showingBackCover()"
+				(click)="showBackCover()"
+			>
+				<span class="dot" aria-hidden="true"></span>
+				Back
+			</button>
+		</div>
+	</div>
+
+	<div class="card-body d-flex flex-column gap-2">
+		<p class="book-genre mb-0">{{ genre() }} | {{ format() }}</p>
+		<h3 class="book-title mb-0">{{ title() }}</h3>
+		<p class="book-author mb-1">by {{ author() }}</p>
+
+		<div class="price-row mt-auto">
+			<p class="book-price mb-0">{{ price() | currency: 'INR':'symbol':'1.0-0' }}</p>
+			@if (originalPrice()) {
+				<p class="original-price mb-0">{{ originalPrice() | currency: 'INR':'symbol':'1.0-0' }}</p>
+			}
+		</div>
+
+		@if (rating()) {
+			<p class="rating mb-0">Rating: {{ rating() }}/5</p>
+		}
+	</div>
+</article>

@@ -1,1 +1,27 @@
-<p>catalog works!</p>
+<section class="catalog-page py-2 py-md-3">
+	<div class="d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-2 mb-4">
+		<div>
+			<p class="catalog-kicker mb-1">Book Collection</p>
+			<h1 class="h3 mb-0">Browse Our Catalog</h1>
+		</div>
+		<p class="text-muted mb-0">Flip each card to view back cover preview and details.</p>
+	</div>
+
+	<div class="row g-4">
+		@for (book of books; track book.id) {
+			<div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+				<app-book
+					[title]="book.title"
+					[author]="book.author"
+					[frontImage]="book.frontImage"
+					[backImage]="book.backImage"
+					[price]="book.price"
+					[originalPrice]="book.originalPrice"
+					[genre]="book.genre"
+					[format]="book.format"
+					[rating]="book.rating"
+				></app-book>
+			</div>
+		}
+	</div>
+</section>

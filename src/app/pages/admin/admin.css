@@ -1,0 +1,28 @@
+.admin-page {
+	min-height: 65vh;
+}
+
+.admin-kicker {
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #b45309;
+}
+
+.stock-input {
+	max-width: 6rem;
+}
+
+.cover-preview {
+	max-height: 6rem;
+	border-radius: 0.375rem;
+	object-fit: cover;
+}
+
+.cover-thumb {
+	width: 3rem;
+	height: 4rem;
+	object-fit: cover;
+	border-radius: 0.25rem;
+}
