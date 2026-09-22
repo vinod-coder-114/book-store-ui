@@ -3,6 +3,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import { AdminService } from '../../services/admin.service';
 import { AdminBook, BookImage } from './admin.model';
+import { environment } from '../../../environments/environment.dev';
 
 @Component({
   imports: [ReactiveFormsModule, CurrencyPipe],
@@ -12,6 +13,7 @@ import { AdminBook, BookImage } from './admin.model';
 })
 export class Admin {
   private readonly fb = new FormBuilder();
+  private readonly environment = environment;
 
   protected readonly books = signal<AdminBook[]>([]);
   constructor(private adminService: AdminService) {
@@ -109,17 +111,24 @@ export class Admin {
 
     const values = this.form.getRawValue();
     const editingId = this.editingId();
-    const images = this.buildImages();
 
     if (editingId !== null) {
+      const images = this.buildImages();
       this.books.update((books) =>
         books.map((book) => (book.id === editingId ? { ...book, ...values, images } : book)),
       );
-    } else {
-      this.books.update((books) => [...books, { id: crypto.randomUUID(), ...values, images }]);
+      this.cancelForm();
+      return;
     }
 
-    this.cancelForm();
+    const images = [this.frontImageFile, this.backImageFile].filter(
+      (file): file is File => file !== null,
+    );
+
+    this.adminService.addBook(values, images).subscribe((book) => {
+      this.books.update((books) => [...books, book]);
+      this.cancelForm();
+    });
   }
 
   protected deleteBook(id: string): void {
@@ -137,7 +146,11 @@ export class Admin {
   }
 
   protected primaryImageUrl(images: BookImage[]): string | null {
-    return images?.find((image) => image.primary)?.downloadUrl ?? null;
+    const imageUrl = images?.find((image) => image.primary)?.downloadUrl ?? null;
+    if (!imageUrl) {
+      return null;
+    }
+    return `${this.environment.hostUrl + imageUrl}`;
   }
 
   // Builds the images[] contract entry for front (primary) and back covers, reusing metadata for unchanged files

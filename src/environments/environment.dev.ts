@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
   apiUrl: 'http://localhost:8080/book-store',
+  hostUrl: 'http://localhost:8080',
 
   auth: {
     loginUrl: `/api/user/login`,
