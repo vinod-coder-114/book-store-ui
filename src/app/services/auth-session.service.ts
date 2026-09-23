@@ -26,9 +26,12 @@ export type AuthSession = {
 export class AuthSessionService {
   private readonly storageKey = 'book_store_auth_session';
   readonly session = signal<AuthSession | null>(null);
+  readonly isAuthenticated = signal<boolean>(false);
 
   constructor() {
-    this.session.set(this.readSessionFromStorage());
+    const session = this.readSessionFromStorage();
+    this.session.set(session);
+    this.isAuthenticated.set(session !== null);
   }
 
   saveSession(response: LoginResponse): AuthSession {
@@ -43,6 +46,7 @@ export class AuthSessionService {
 
     sessionStorage.setItem(this.storageKey, JSON.stringify(session));
     this.session.set(session);
+    this.isAuthenticated.set(true);
     return session;
   }
 
@@ -53,6 +57,7 @@ export class AuthSessionService {
   clearSession(): void {
     sessionStorage.removeItem(this.storageKey);
     this.session.set(null);
+    this.isAuthenticated.set(false);
   }
 
   private readSessionFromStorage(): AuthSession | null {

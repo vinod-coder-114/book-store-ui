@@ -1,0 +1,23 @@
+@if (open()) {
+	<div class="confirm-backdrop" role="presentation" (click)="onCancel()">
+		<div
+			class="modal-content confirm-dialog"
+			role="alertdialog"
+			aria-modal="true"
+			[attr.aria-label]="title()"
+			(click)="$event.stopPropagation()"
+		>
+			<div class="modal-header">
+				<h2 class="h5 mb-0">{{ title() }}</h2>
+				<button type="button" class="btn-close" aria-label="Close" (click)="onCancel()"></button>
+			</div>
+			<div class="modal-body">
+				<ng-content></ng-content>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-outline-secondary" (click)="onCancel()">{{ cancelLabel() }}</button>
+				<button type="button" class="btn btn-danger" (click)="onConfirm()">{{ confirmLabel() }}</button>
+			</div>
+		</div>
+	</div>
+}

@@ -10,6 +10,7 @@ import { AuthSessionService } from "./auth-session.service";
 export class AdminService {
     private readonly getBooksApi = `${environment.apiUrl + environment.catalog.listBooksUrl}`;
     private readonly addBookApi = `${environment.apiUrl + environment.catalog.listBooksUrl}`;
+    private readonly deleteBookApi = `${environment.apiUrl + environment.catalog.listBooksUrl}`;
 
   constructor(
     private http: HttpClient,
@@ -19,7 +20,7 @@ export class AdminService {
   getBooksInformation() {
     const headers = this.buildAuthHeaders();
     const responseData = this.http.get<AdminBook[]>(this.getBooksApi, { headers });
-    console.log(responseData.subscribe(data => console.log(data)));
+    // console.log(responseData.subscribe(data => console.log(data)));
     return responseData;
   }
 
@@ -32,11 +33,35 @@ export class AdminService {
     return this.http.post<AdminBook>(this.addBookApi, formData, { headers });
   }
 
+  deleteBook(bookId: string) {
+    const headers = this.buildAuthHeaders();
+    return this.http.delete<void>(`${this.deleteBookApi}/${bookId}`, { headers });
+  }
+
+  // book is sent as a JSON part; front/back cover files are only included when the admin replaced them
+  updateBook(
+    bookId: string,
+    book: Omit<AdminBook, 'id' | 'images'>,
+    frontImage: File | null,
+    backImage: File | null,
+  ) {
+    const headers = this.buildAuthHeaders();
+    const formData = new FormData();
+    formData.append('book', new Blob([JSON.stringify(book)], { type: 'application/json' }));
+    if (frontImage) {
+      formData.append('images', frontImage, frontImage.name);
+    }
+    if (backImage) {
+      formData.append('images', backImage, backImage.name);
+    }
+    return this.http.put<AdminBook>(`${this.getBooksApi}/${bookId}`, formData, { headers });
+  }
+
   // Attaches the Bearer token for every admin request (login/register don't need it)
   private buildAuthHeaders(): HttpHeaders {
     const token = this.authSessionService.getSession()?.token ?? '';
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       'X-Correlation-Id': crypto.randomUUID(),
     });
   }

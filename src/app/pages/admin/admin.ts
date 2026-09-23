@@ -1,12 +1,13 @@
-import { Component, signal } from '@angular/core';
+import { Component, ElementRef, ViewChild, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import { AdminService } from '../../services/admin.service';
 import { AdminBook, BookImage } from './admin.model';
 import { environment } from '../../../environments/environment.dev';
+import { ConfirmDialog } from '../../shared/components/confirm-dialog/confirm-dialog';
 
 @Component({
-  imports: [ReactiveFormsModule, CurrencyPipe],
+  imports: [ReactiveFormsModule, CurrencyPipe, ConfirmDialog],
   selector: 'app-admin',
   styleUrl: './admin.css',
   templateUrl: './admin.html',
@@ -14,6 +15,7 @@ import { environment } from '../../../environments/environment.dev';
 export class Admin {
   private readonly fb = new FormBuilder();
   private readonly environment = environment;
+  @ViewChild('bookFormSection') private formSection?: ElementRef<HTMLElement>;
 
   protected readonly books = signal<AdminBook[]>([]);
   constructor(private adminService: AdminService) {
@@ -64,6 +66,7 @@ export class Admin {
     this.frontImagePreview.set(null);
     this.backImagePreview.set(null);
     this.showForm.set(true);
+    this.scrollToForm();
   }
 
   protected openEditForm(book: AdminBook): void {
@@ -80,9 +83,18 @@ export class Admin {
     this.existingImages.set(book.images ?? []);
     this.frontImageFile = null;
     this.backImageFile = null;
-    this.frontImagePreview.set(book.images?.find((image) => image.primary)?.downloadUrl ?? null);
-    this.backImagePreview.set(book.images?.find((image) => !image.primary)?.downloadUrl ?? null);
+    this.frontImagePreview.set(this.toAbsoluteUrl(book.images?.find((image) => image.primary)?.downloadUrl));
+    this.backImagePreview.set(this.toAbsoluteUrl(book.images?.find((image) => !image.primary)?.downloadUrl));
     this.showForm.set(true);
+    this.scrollToForm();
+  }
+
+  // Existing images are host-relative paths; new uploads are already data URLs
+  private toAbsoluteUrl(url: string | null | undefined): string | null {
+    if (!url) {
+      return null;
+    }
+    return url.startsWith('data:') || url.startsWith('http') ? url : `${this.environment.hostUrl + url}`;
   }
 
   protected cancelForm(): void {
@@ -114,10 +126,14 @@ export class Admin {
 
     if (editingId !== null) {
       const images = this.buildImages();
-      this.books.update((books) =>
-        books.map((book) => (book.id === editingId ? { ...book, ...values, images } : book)),
-      );
-      this.cancelForm();
+      this.adminService
+        .updateBook(editingId, values, this.frontImageFile, this.backImageFile)
+        .subscribe(() => {
+          this.books.update((books) =>
+            books.map((book) => (book.id === editingId ? { ...book, ...values, images } : book)),
+          );
+          this.cancelForm();
+        });
       return;
     }
 
@@ -125,17 +141,44 @@ export class Admin {
       (file): file is File => file !== null,
     );
 
-    this.adminService.addBook(values, images).subscribe((book) => {
-      this.books.update((books) => [...books, book]);
-      this.cancelForm();
+    this.adminService.addBook(values, images).subscribe({
+      next: (book) => {
+        this.books.update((books) => [...books, book]);
+        this.cancelForm();
+      },
+      error: (error) => {
+        console.error('Add book failed', error);
+        alert('Add book failed! ' + error.message);
+      }
     });
   }
 
-  protected deleteBook(id: string): void {
-    if (!confirm('Delete this book?')) {
+  protected readonly bookPendingDelete = signal<AdminBook | null>(null);
+
+  protected requestDelete(book: AdminBook): void {
+    this.bookPendingDelete.set(book);
+  }
+
+  protected cancelDelete(): void {
+    this.bookPendingDelete.set(null);
+  }
+
+  protected confirmDelete(): void {
+    const book = this.bookPendingDelete();
+    if (!book) {
       return;
     }
-    this.books.update((books) => books.filter((book) => book.id !== id));
+    this.adminService.deleteBook(book.id).subscribe({
+      next: () => {
+        this.books.update((books) => books.filter((b) => b.id !== book.id));
+        this.bookPendingDelete.set(null);
+      },
+      // capture and handle errors during delete operation
+      error: (error) => {
+        console.error('Delete failed', error);
+        alert('Delete failed! '+ error.message);
+      }
+    });
   }
 
   protected updateStock(id: string, stock: number): void {
@@ -145,12 +188,13 @@ export class Admin {
     );
   }
 
+  // Waits a tick so the @if-rendered form section exists before scrolling to it
+  private scrollToForm(): void {
+    setTimeout(() => this.formSection?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }
+
   protected primaryImageUrl(images: BookImage[]): string | null {
-    const imageUrl = images?.find((image) => image.primary)?.downloadUrl ?? null;
-    if (!imageUrl) {
-      return null;
-    }
-    return `${this.environment.hostUrl + imageUrl}`;
+    return this.toAbsoluteUrl(images?.find((image) => image.primary)?.downloadUrl);
   }
 
   // Builds the images[] contract entry for front (primary) and back covers, reusing metadata for unchanged files

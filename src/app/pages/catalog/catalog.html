@@ -8,18 +8,20 @@
 	</div>
 
 	<div class="row g-4">
-		@for (book of books; track book.id) {
+		@for (book of books(); track book.id) {
 			<div class="col-12 col-sm-6 col-lg-4 col-xl-3">
 				<app-book
-					[title]="book.title"
+					/* [title]="book.title"
 					[author]="book.author"
-					[frontImage]="book.frontImage"
-					[backImage]="book.backImage"
-					[price]="book.price"
-					[originalPrice]="book.originalPrice"
+					[frontImage]="frontImageUrl(book)"
+					[backImage]="backImageUrl(book)"
+					[price]="book.pricing.salePrice"
+					[originalPrice]="book.pricing.listPrice"
 					[genre]="book.genre"
 					[format]="book.format"
-					[rating]="book.rating"
+					[rating]="book.rating.average"
+					[ratingCount]="book.rating.count" */
+					[book]="book"
 				></app-book>
 			</div>
 		}

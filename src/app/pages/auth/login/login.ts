@@ -52,7 +52,7 @@ export class Login {
           const isAdmin = session.role === 'admin';
           console.log('Login successful', response);
           this.isSubmitted.set(false);
-          void this.router.navigate([isAdmin ? '/account' : '/books']);
+          void this.router.navigate([isAdmin ? '/admin/books' : '/books']);
         },
         error: (error) => {
           console.error('Login failed', error);

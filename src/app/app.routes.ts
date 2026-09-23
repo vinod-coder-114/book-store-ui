@@ -1,45 +1,42 @@
 import { Routes } from '@angular/router';
-import { Account } from './pages/account/account';
-import { Admin } from './pages/admin/admin';
-import { Cart } from './pages/cart/cart';
-import { Catalog } from './pages/catalog/catalog';
-import { Checkout } from './pages/checkout/checkout';
-import { Home } from './pages/home/home';
-import { Login } from './pages/auth/login/login';
-import { Signup } from './pages/auth/signup/signup';
+import { authGuard } from './pages/auth/authguard';
 
 export const routes: Routes = [
 	{
 		path: '',
-		component: Home,
+		loadComponent: () => import('./pages/catalog/catalog').then(m => m.Catalog),
 	},
 	{
 		path: 'books',
-		component: Catalog,
+		loadComponent: () => import('./pages/catalog/catalog').then(m => m.Catalog),
 	},
 	{
-		path: 'cart',
-		component: Cart,
+		path: 'user/cart',
+		canActivate: [authGuard],
+		loadComponent: () => import('./pages/cart/cart').then(m => m.Cart),
 	},
 	{
-		path: 'checkout',
-		component: Checkout,
+		path: 'user/checkout',
+		canActivate: [authGuard],
+		loadComponent: () => import('./pages/checkout/checkout').then(m => m.Checkout),
 	},
 	{
-		path: 'account',
-		component: Account,
+		path: 'user/account',
+		canActivate: [authGuard],
+		loadComponent: () => import('./pages/account/account').then(m => m.Account),
 	},
 	{
 		path: 'admin/books',
-		component: Admin,
+		canActivate: [authGuard],
+		loadComponent: () => import('./pages/admin/admin').then(m => m.Admin),
 	},
 	{
 		path: 'login',
-		component: Login,
+		loadComponent: () => import('./pages/auth/login/login').then(m => m.Login),
 	},
 	{
 		path: 'signup',
-		component: Signup,
+		loadComponent: () => import('./pages/auth/signup/signup').then(m => m.Signup),
 	},
 	{
 		path: '**',

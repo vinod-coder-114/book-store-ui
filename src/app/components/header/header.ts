@@ -1,5 +1,6 @@
 import { NgOptimizedImage } from '@angular/common';
 import { Component, computed, inject, input, output, signal } from '@angular/core';
+import { CartService } from '../../services/cart-service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
@@ -10,8 +11,8 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class Header {
   private readonly router = inject(Router);
+  private readonly cartService = inject(CartService);
 
-  readonly cartCount = input(0);
   readonly isLoggedIn = input(false);
   readonly userName = input('Guest');
   readonly userRole = input<'customer' | 'admin'>('customer');
@@ -60,4 +61,7 @@ export class Header {
     this.closeUserMenu();
     this.loggedOut.emit();
   }
+
+  //  cart count update
+  readonly cartCount = this.cartService.cartItemCount;
 }

@@ -1,43 +1,77 @@
 <article class="book-card card border-0 shadow-sm h-100">
-	<div class="cover-area">
-		<img class="book-image" [src]="activeImage()" [alt]="title() + ' cover image'" loading="lazy" />
+  <div class="cover-area">
+    <img
+      class="book-image card-img-top"
+      [src]="
+        showingBackCover()
+          ? environment.hostUrl + book().images[1].downloadUrl
+          : environment.hostUrl + book().images[0].downloadUrl
+      "
+      [alt]="book().title + ' cover image'"
+      loading="lazy"
+    />
 
-		<div class="cover-toggle" role="group" aria-label="Toggle book cover side">
-			<button
-				type="button"
-				class="cover-toggle-btn"
-				[class.active]="!showingBackCover()"
-				(click)="showFrontCover()"
-			>
-				<span class="dot" aria-hidden="true"></span>
-				Front
-			</button>
-			<button
-				type="button"
-				class="cover-toggle-btn"
-				[class.active]="showingBackCover()"
-				(click)="showBackCover()"
-			>
-				<span class="dot" aria-hidden="true"></span>
-				Back
-			</button>
-		</div>
-	</div>
+    <div class="cover-toggle" role="group" aria-label="Toggle book cover side">
+      <button
+        type="button"
+        class="cover-toggle-btn"
+        [class.active]="!showingBackCover()"
+        (click)="showFrontCover()"
+      >
+        <span class="dot" aria-hidden="true"></span>
+        Front
+      </button>
+      <button
+        type="button"
+        class="cover-toggle-btn"
+        [class.active]="showingBackCover()"
+        (click)="showBackCover()"
+      >
+        <span class="dot" aria-hidden="true"></span>
+        Back
+      </button>
+    </div>
+  </div>
 
-	<div class="card-body d-flex flex-column gap-2">
-		<p class="book-genre mb-0">{{ genre() }} | {{ format() }}</p>
-		<h3 class="book-title mb-0">{{ title() }}</h3>
-		<p class="book-author mb-1">by {{ author() }}</p>
+  <div class="card-body d-flex flex-column gap-2">
+    <p class="book-genre mb-0">{{ book().genre }} | {{ book().format }}</p>
+    <h3 class="book-title mb-0">{{ book().title }}</h3>
+    <p class="book-author mb-1">by {{ book().author }}</p>
 
-		<div class="price-row mt-auto">
-			<p class="book-price mb-0">{{ price() | currency: 'INR':'symbol':'1.0-0' }}</p>
-			@if (originalPrice()) {
-				<p class="original-price mb-0">{{ originalPrice() | currency: 'INR':'symbol':'1.0-0' }}</p>
-			}
-		</div>
-
-		@if (rating()) {
-			<p class="rating mb-0">Rating: {{ rating() }}/5</p>
+    <div class="price-row mt-auto d-flex justify-content-between">
+      <div class="d-flex gap-2 align-items-center">
+        <span class="book-price mb-0">{{
+          book().pricing.listPrice | currency: 'INR' : 'symbol' : '1.0-0'
+        }}</span>
+        @if (book().pricing.salePrice) {
+          <span class="original-price mb-0">{{
+            book().pricing.salePrice | currency: 'INR' : 'symbol' : '1.0-0'
+          }}</span>
+        }
+      </div>
+      @if (book().rating.average || book().rating.count) {
+        <div class="d-flex gap-2 align-items-center rating">
+          <span class="rating-star">★</span>
+          <span>{{ book().rating.average }}/5</span>
+          <span>({{ book().rating.count }})</span>
+        </div>
+      }
+    </div>
+    <div class="d-flex mt-2 align-items-center justify-content-between">
+		@if (book().stock <= 0) {
+			<span class="btn btn-outline-danger">Notify Me</span>
 		}
-	</div>
+		@else {
+			<button type="button" class="btn btn-primary flex-grow-1 py-2 fw-semibold" [disabled]="book().stock == 0" (click)="addToCart(book())">
+				<img src="icons/shopping.png" width="20" height="20" alt="Cart icon" class="cart-icon" />
+				Add to Cart
+			</button>
+		}
+        
+	  
+	  <button type="button" class="btn btn-outline-secondary py-2 mx-2">
+        <img src="icons/e-commerce.png" width="23" height="23" alt="E-commerce icon" class="cart-icon" />
+      </button>
+    </div>
+  </div>
 </article>
