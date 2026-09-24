@@ -28,6 +28,65 @@
 	display: block;
 }
 
+.user-menu-trigger {
+	width: 2.25rem;
+	height: 2.25rem;
+	padding: 0;
+	border: 1px solid var(--app-border);
+	border-radius: 50%;
+	background: var(--app-surface);
+	display: grid;
+	place-items: center;
+	transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
+}
+
+.user-menu-trigger:hover {
+	border-color: var(--app-primary);
+	transform: translateY(-1px);
+}
+
+.user-menu-trigger:focus-visible {
+	outline: 0;
+	border-color: var(--app-primary);
+	box-shadow: 0 0 0 0.2rem rgb(11 94 215 / 30%);
+}
+
+.user-avatar {
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.user-menu .dropdown-menu {
+	left: auto;
+	right: 0;
+	min-width: 13rem;
+	margin-top: 0.5rem;
+}
+
+.user-menu:hover .dropdown-menu,
+.user-menu:focus-within .dropdown-menu {
+	display: block;
+}
+
+.account-label,
+.account-name {
+	display: block;
+}
+
+.account-label {
+	color: var(--app-muted);
+	font-size: 0.75rem;
+	font-weight: 400;
+	margin-bottom: 0.125rem;
+}
+
+.account-name {
+	max-width: 11rem;
+	overflow: hidden;
+	font-weight: 600;
+	text-overflow: ellipsis;
+}
+
 @media (max-width: 991.98px) {
 	.nav-search {
 		width: 100%;

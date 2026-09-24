@@ -5,7 +5,7 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  imports: [RouterLink, RouterLinkActive, FormsModule],
+  imports: [NgOptimizedImage, RouterLink, RouterLinkActive, FormsModule],
   selector: 'app-header',
   styleUrl: './header.css',
   templateUrl: './header.html',

@@ -152,28 +152,58 @@
 
         <div class="auth-area">
           @if (!isLoggedIn()) {
-            <div class="d-flex gap-2 justify-content-start justify-content-lg-end">
-              <a
-                class="btn border-primary text-primary"
-                routerLink="/login"
-                (click)="closeMenu(); closeUserMenu()"
-                >Login</a
-              >
-              <a class="btn btn-primary" routerLink="/signup" (click)="closeMenu(); closeUserMenu()"
-                >Signup</a
-              >
-            </div>
-          } @else {
-            <div class="dropdown">
+            <div class="dropdown user-menu guest-menu">
               <button
-                class="btn btn-outline-secondary dropdown-toggle"
+                class="user-menu-trigger"
                 type="button"
                 [attr.aria-expanded]="userMenuOpen()"
+                aria-haspopup="menu"
+                aria-label="Open sign in menu"
                 (click)="toggleUserMenu($event)"
               >
-                {{ userName() }}
+                <img
+                  ngSrc="icons/user-single.png"
+                  width="24"
+                  height="24"
+                  alt=""
+                  class="user-avatar"
+                />
               </button>
               <ul class="dropdown-menu dropdown-menu-end" [class.show]="userMenuOpen()">
+                <li class="dropdown-header">Welcome to Book Store</li>
+                <li><hr class="dropdown-divider" /></li>
+                <li>
+                  <a class="dropdown-item" routerLink="/login" (click)="closeMenu(); closeUserMenu()">Login</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" routerLink="/signup" (click)="closeMenu(); closeUserMenu()">Sign up</a>
+                </li>
+              </ul>
+            </div>
+          } @else {
+            <div class="dropdown user-menu">
+              <button
+                class="user-menu-trigger"
+                type="button"
+                [attr.aria-expanded]="userMenuOpen()"
+                aria-haspopup="menu"
+                aria-label="Open account menu"
+                (click)="toggleUserMenu($event)"
+              >
+                <img
+                  ngSrc="icons/user-single.png"
+                  width="24"
+                  height="24"
+                  alt=""
+                  class="user-avatar"
+                />
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" [class.show]="userMenuOpen()">
+                <li class="dropdown-header">
+                  <span class="account-label">Signed in as</span>
+                  <span class="account-name fw-bold">{{ userName() }}</span>
+                </li>
+                <li><hr class="dropdown-divider" /></li>
                 <li>
                   <a
                     class="dropdown-item"
