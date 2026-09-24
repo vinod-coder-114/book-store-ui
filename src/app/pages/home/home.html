@@ -1,1 +1,273 @@
-<p>home works!</p>
+<!-- =========================
+     HERO SECTION
+========================= -->
+
+<section class="hero-section">
+  <div class="hero-background">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <span class="badge bg-primary-subtle text-primary px-3 py-2 mb-4">
+            Welcome to Book Store
+          </span>
+
+          <h1 class="hero-title fw-bold">
+            Discover Your
+            <span class="text-primary"> Next Great Read </span>
+          </h1>
+
+          <p class="hero-description text-secondary">
+            Explore a world of stories, knowledge and imagination. Find books that inspire, educate
+            and entertain.
+          </p>
+
+          <div class="d-flex gap-3 mt-4">
+            <a routerLink="/book" class="btn btn-primary btn-lg px-4">
+              Browse Books
+              <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+
+            <a routerLink="/book" class="btn btn-outline-primary btn-lg px-4">
+              Explore Collection
+            </a>
+          </div>
+
+
+          <div class="hero-stats mt-5 row justify-content-start d-flex gap-4">
+            <div class="hero-stat col-2 d-flex justify-content-center gap-3 align-items-center">
+              <i class="bi bi-book text-primary fs-1"></i>
+              <div class="d-flex flex-column fw-semibold">
+                <strong>10K+</strong>
+                <small>Books</small>
+              </div>
+            </div>
+
+            <div
+              class="hero-stat col-2 d-flex justify-content-center align-items-center gap-3 border-start"
+            >
+              <i class="bi bi-people fs-1"></i>
+              <div class="d-flex flex-column fw-semibold">
+                <strong>500+</strong>
+                <small>Authors</small>
+              </div>
+            </div>
+
+            <div
+              class="hero-stat col-2 d-flex justify-content-center align-items-center gap-3 border-start"
+            >
+              <i class="bi bi-heart fs-1"></i>
+              <div class="d-flex flex-column fw-semibold">
+                <strong>50K+</strong>
+                <small>Readers</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+     SHOP BY CATEGORY
+========================= -->
+
+<section class="categories-section py-4">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h2 class="category-heading mb-0">Shop by Category</h2>
+      <a routerLink="/book" class="view-all-link text-decoration-none">
+        View All
+        <i class="bi bi-arrow-right ms-1"></i>
+      </a>
+    </div>
+
+    <div class="row g-3">
+      @for (category of catagoriesSignal(); track category.name) {
+        <div class="col-6 col-md-4 col-lg-3 col-xl">
+          <a href="['/book']" class="text-decoration-none">
+            <div
+              class="category-card"
+              [class.category-fiction]="category.name === 'Fiction'"
+              [class.category-nonfiction]="category.name === 'Non-Fiction'"
+              [class.category-selfhelp]="category.name === 'Self Help'"
+              [class.category-business]="category.name === 'Business'"
+              [class.category-technology]="category.name === 'Technology'"
+              [class.category-children]="category.name === 'Children'"
+              [class.category-comics]="category.name === 'Comics'"
+              [class.category-academic]="category.name === 'Academic'"
+              [class.category-ai]="category.name === 'Artificial Intelligence'"
+            >
+              <div class="category-icon">
+                <i class="bi {{ category.icon }}"></i>
+              </div>
+              <div class="category-name">
+                {{ category.name }}
+              </div>
+            </div>
+          </a>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+     FEATURED BOOKS
+========================= -->
+
+<section class="py-5">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <span class="text-primary fw-semibold"> HAND PICKED </span>
+
+        <h2 class="fw-bold mt-2 mb-1">Featured Books</h2>
+
+        <p class="text-secondary mb-0">Popular books our readers love.</p>
+      </div>
+
+      <a routerLink="/book" class="btn btn-outline-primary">
+        View All Books
+        <i class="bi bi-arrow-right ms-1"></i>
+      </a>
+    </div>
+
+    <!-- Featured books -->
+
+    <div class="row">
+      @for (book of featuredBooks(); track book.id) {
+        <div class="col-3">
+          <app-book [book]="book"> </app-book>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+     PROMOTIONAL SECTION
+========================= -->
+
+<section class="py-4">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-6 d-flex">
+        <div class="promo-card promo-discount rounded-4 p-4 p-lg-5">
+          <h2 class="fw-bold">Flat <span class="text-danger">30% OFF</span></h2>
+          <p class="text-secondary">On bestselling books. Build your reading collection today.</p>
+          <a routerLink="/book" class="btn btn-dark">
+            Shop Now
+            <i class="bi bi-arrow-right ms-2"></i>
+          </a>
+        </div>
+        <img src="images/banner-bestsellers.png" alt="" class="h-100 w-100 image-fluid" />
+      </div>
+
+      <div class="col-lg-6 d-flex">
+        <div class="promo-card promo-new rounded-4 p-4 p-lg-5 h-100 w-100">
+          <h2 class="fw-bold">New Arrivals</h2>
+          <p class="text-secondary">Fresh stories just landed in our store.</p>
+          <a routerLink="/book" class="btn btn-primary fs-6">
+            Explore Now
+            <i class="bi bi-arrow-right ms-2"></i>
+          </a>
+        </div>
+        <img src="images/banner-new-arrivals.png" alt="" class="h-100 w-50 image-fluid" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+     WHY SHOP WITH US
+========================= -->
+
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="text-center mb-5">
+      <span class="text-primary fw-semibold"> WHY BOOK STORE </span>
+
+      <h2 class="fw-bold mt-2">Why Shop With Us?</h2>
+    </div>
+
+    <div class="row g-4 py-4">
+      <div class="col-6 col-lg-3">
+        <div class="text-center d-flex align-items-center justify-content-center">
+          <div class="feature-icon mx-auto mb-3">
+            <i class="bi bi-truck fs-1"></i>
+          </div>
+          <div class="d-flex flex-column">
+            <h5 class="fw-semibold fs-6">Fast Delivery</h5>
+            <p class="text-secondary small">Get your favorite books delivered quickly.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-lg-3">
+        <div class="text-center d-flex align-items-center justify-content-center">
+          <div class="feature-icon mx-auto mb-3">
+            <i class="bi bi-shield-check fs-1"></i>
+          </div>
+          <div class="d-flex flex-column align-items-center">
+            <h5 class="fw-semibold fs-6">Secure Payments</h5>
+            <p class="text-secondary small">Safe and secure payment experience.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-lg-3">
+        <div class="text-center d-flex align-items-center justify-content-center">
+          <div class="feature-icon mx-auto mb-3">
+            <i class="bi bi-arrow-counterclockwise fs-1"></i>
+          </div>
+          <div class="d-flex flex-column align-items-center">
+            <h5 class="fw-semibold fs-6">Easy Returns</h5>
+            <p class="text-secondary small">Simple and hassle-free returns.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-lg-3">
+        <div class="text-center d-flex align-items-center justify-content-center">
+          <div class="feature-icon mx-auto mb-3">
+            <i class="bi bi-patch-check fs-1"></i>
+          </div>
+          <div class="d-flex flex-column">
+            <h5 class="fw-semibold fs-6">Genuine Books</h5>
+            <p class="text-secondary small">Authentic books from trusted sources.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =========================
+     NEWSLETTER
+========================= -->
+
+<section class="py-3 container newsletter">
+  <div class="row g-4">
+    <div class="d-flex rounded-4 p-4 p-lg-5 align-items-center justify-content-center text-center">
+      <div class="col-6">
+        <i class="bi bi-envelope-paper fs-1 text-primary"></i>
+        <h2 class="fw-bold mt-3">Join Our Reading Community</h2>
+        <p class="text-secondary">
+          Subscribe to receive new book arrivals, offers and reading recommendations.
+        </p>
+      </div>
+
+      <div class="col-6 d-flex">
+
+        <input
+          type="email"
+          class="form-control"
+          placeholder="Enter your email address"
+        />
+
+        <button class="btn btn-primary">Subscribe</button>
+      </div>
+    </div>
+  </div>
+</section>

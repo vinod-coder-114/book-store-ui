@@ -2,14 +2,18 @@ import { NgOptimizedImage } from '@angular/common';
 import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { CartService } from '../../services/cart-service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
-  imports: [NgOptimizedImage, RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, FormsModule],
   selector: 'app-header',
   styleUrl: './header.css',
   templateUrl: './header.html',
 })
 export class Header {
+  searchText = "";
+  
+
   private readonly router = inject(Router);
   private readonly cartService = inject(CartService);
 
@@ -64,4 +68,7 @@ export class Header {
 
   //  cart count update
   readonly cartCount = this.cartService.cartItemCount;
+
+  //  wishlist count update
+  readonly wishlistCount = this.cartService.wishListCount;
 }

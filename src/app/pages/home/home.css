@@ -1,0 +1,444 @@
+/* =========================
+   HERO SECTION
+========================= */
+
+.hero-section {
+  width: 100%;
+  overflow: hidden;
+}
+
+.hero-background {
+  min-height: 600px;
+  border-radius: 10px;
+
+  background-image: url('/images/hero-section-img.png');
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+}
+
+
+/* Content is positioned over the image */
+
+.hero-content {
+
+  min-height: 600px;
+
+  display: flex;
+  align-items: center;
+
+}
+
+
+/* Keep text on the left */
+
+.hero-text {
+
+  width: 58%;
+
+  padding: 60px 0;
+
+}
+
+
+/* Make the text easier to read over image */
+
+.hero-text h1 {
+  max-width: 650px;
+}
+
+.hero-text p {
+  max-width: 650px;
+}
+
+
+/* Statistics */
+
+.hero-stats {
+  justify-content: flex-start !important;
+  display: flex;
+  align-items: center;
+  margin-top: 50px !important;
+}
+.hero-stat {
+  min-width: 135px;
+}
+
+
+
+/* Mobile */
+
+@media (max-width: 991.98px) {
+
+  .hero-background {
+
+    min-height: 650px;
+
+    /*
+     * Move the image slightly to the right
+     * so the books don't cover the text.
+     */
+    background-position: 65% center;
+
+  }
+
+  .hero-content {
+    min-height: 650px;
+  }
+
+  .hero-text {
+
+    width: 70%;
+
+    padding: 40px 0;
+
+  }
+
+}
+
+
+@media (max-width: 767.98px) {
+
+  .hero-background {
+
+    min-height: 700px;
+
+    /*
+     * Add a white transparent overlay
+     * so text remains readable on mobile.
+     */
+    background-position: 65% center;
+
+  }
+
+  .hero-text {
+
+    width: 100%;
+
+    padding: 40px 20px;
+
+  }
+
+  .hero-text h1 {
+
+    font-size: 2.5rem;
+
+  }
+
+  .hero-text p {
+
+    font-size: 1rem;
+
+  }
+
+  .hero-stats {
+
+    margin-top: 35px !important;
+
+  }
+}
+
+  /* =========================
+   SHOP BY CATEGORY
+========================= */
+
+.categories-section {
+  background-color: #ffffff;
+}
+
+
+/* Section heading */
+
+.category-heading {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #172b4d;
+}
+
+
+/* View all */
+
+.view-all-link {
+  color: #0d6efd;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.view-all-link:hover {
+  color: #0a58ca;
+}
+
+
+/* Category card */
+
+.category-card {
+  height: 96px;
+
+  border-radius: 10px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 7px;
+  font-weight: 100;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+
+}
+
+
+/* Hover */
+
+.category-card:hover {
+
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 6px 15px rgba(0, 0, 0, 0.08);
+
+}
+
+
+/* Icon */
+
+.category-icon {
+
+  font-size: 1.9rem;
+
+  line-height: 1;
+
+}
+
+
+/* Category name */
+
+.category-name {
+
+  font-size: 0.8rem;
+
+  font-weight: 600;
+
+  color: #172b4d;
+  text-align: center;
+
+}
+
+
+/* =========================
+   CATEGORY COLORS
+========================= */
+
+
+/* Fiction */
+
+.category-fiction {
+
+  background-color: #fdecef;
+
+}
+
+.category-fiction .category-icon {
+
+  color: #17324d;
+
+}
+
+
+/* Non Fiction */
+
+.category-nonfiction {
+
+  background-color: #fff6e6;
+
+}
+
+.category-nonfiction .category-icon {
+
+  color: #f4a900;
+
+}
+
+
+/* Self Help */
+
+.category-selfhelp {
+
+  background-color: #eaf7ea;
+
+}
+
+.category-selfhelp .category-icon {
+
+  color: #399653;
+
+}
+
+
+/* Business */
+
+.category-business {
+
+  background-color: #e7f5ff;
+
+}
+
+.category-business .category-icon {
+
+  color: #2694d8;
+
+}
+
+
+/* Technology */
+
+.category-technology {
+
+  background-color: #eeeeff;
+
+}
+
+.category-technology .category-icon {
+
+  color: #5145cd;
+
+}
+
+
+/* Children */
+
+.category-children {
+
+  background-color: #fff5df;
+
+}
+
+.category-children .category-icon {
+
+  color: #d99a18;
+
+}
+
+
+/* Comics */
+
+.category-comics {
+
+  background-color: #fcebef;
+
+}
+
+.category-comics .category-icon {
+
+  color: #dc263d;
+
+}
+
+
+/* Academic */
+
+.category-academic {
+
+  background-color: #e4f8f6;
+
+}
+
+.category-academic .category-icon {
+
+  color: #159a9c;
+
+}
+
+/*  AI  */
+.category-ai {
+  background-color: #f0eee8;
+}
+
+.category-ai .category-icon {
+  color: #2b1d1d;
+}
+
+.category-ai .category-name {
+  font-size: x-small;
+}
+
+
+/* =========================
+   PROMOTIONS
+========================= */
+
+
+.promo-card {
+  min-height: 280px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.promo-discount {
+  background:
+    linear-gradient(
+      135deg,
+      #fff8ed,
+      #fff
+    );
+}
+
+.promo-new {
+  background:
+    linear-gradient(
+      135deg,
+      #edf6ff,
+      #fff
+    );
+}
+
+
+/* =========================
+   FEATURES
+========================= */
+
+.feature-icon {
+  width: 65px;
+  height: 65px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background-color: #e7f1ff;
+  color: #0d6efd;
+
+  font-size: 1.5rem;
+}
+
+
+/* =========================
+   NEWSLETTER
+========================= */
+
+.newsletter {
+  background-color: #f1f0d3;
+  border-radius: 15px;
+}
+
+.newsletter-content {
+  max-width: 650px;
+}

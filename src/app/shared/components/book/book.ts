@@ -47,6 +47,13 @@ export class BookCardComponent {
       this.router.navigate(['/login']);
       
     }
+  }
 
+  addToWishList(): void {
+    if(!this.authService.isAuthenticated()) {
+        this.router.navigate(['/login']);
+        return;
+    } 
+    this.cartService.addToWishList(this.book());
   }
 }

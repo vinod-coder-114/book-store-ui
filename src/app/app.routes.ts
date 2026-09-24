@@ -4,7 +4,7 @@ import { authGuard } from './pages/auth/authguard';
 export const routes: Routes = [
 	{
 		path: '',
-		loadComponent: () => import('./pages/catalog/catalog').then(m => m.Catalog),
+		loadComponent: () => import('./pages/home/home').then(m => m.Home),
 	},
 	{
 		path: 'books',
