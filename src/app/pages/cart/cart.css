@@ -1,0 +1,138 @@
+.cart-page {
+  max-width: 1200px;
+}
+
+.cart-page h1,
+.cart-page h2 {
+  color: var(--app-text);
+}
+
+.continue-link {
+  font-weight: 600;
+}
+
+.empty-cart {
+  max-width: 520px;
+  padding: 3.5rem 2rem;
+}
+
+.empty-cart-icon {
+  font-size: 3.5rem;
+  line-height: 1;
+  margin-bottom: 1.25rem;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr) auto;
+  gap: 1.25rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--app-border);
+}
+
+.cart-item:last-child {
+  border-bottom: 0;
+}
+
+.book-cover {
+  width: 104px;
+  height: 148px;
+  border-radius: 0.375rem;
+  background: #e9ecef;
+  object-fit: cover;
+}
+
+.book-cover-placeholder {
+  display: grid;
+  place-items: center;
+  color: var(--app-muted);
+  font-size: 0.8rem;
+}
+
+.book-meta {
+  color: var(--app-muted);
+  font-size: 0.875rem;
+}
+
+.price,
+.item-total {
+  color: var(--app-text);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.original-price {
+  color: var(--app-muted);
+  text-decoration: line-through;
+}
+
+.quantity-control {
+  display: inline-grid;
+  grid-template-columns: 2.4rem 2.75rem 2.4rem;
+  align-items: center;
+}
+
+.quantity-control button {
+  min-height: 2.4rem;
+  padding: 0;
+}
+
+.quantity-control output {
+  text-align: center;
+  font-weight: 600;
+}
+
+.item-actions {
+  min-width: 6.5rem;
+  text-align: right;
+}
+
+.summary-card {
+  position: sticky;
+  top: 6rem;
+}
+
+.summary-lines > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.summary-lines dt,
+.summary-lines dd {
+  margin: 0;
+}
+
+.summary-total {
+  border-top: 1px solid var(--app-border);
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+@media (max-width: 575.98px) {
+  .cart-item {
+    grid-template-columns: 76px minmax(0, 1fr);
+    gap: 1rem;
+    padding: 1.25rem;
+  }
+
+  .book-cover {
+    width: 76px;
+    height: 110px;
+  }
+
+  .item-actions {
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .item-actions .item-total {
+    margin-bottom: 0 !important;
+  }
+}

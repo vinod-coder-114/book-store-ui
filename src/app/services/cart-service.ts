@@ -6,10 +6,18 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface CartTotals {
+  subtotal: number;
+  discount: number;
+  delivery: number;
+  total: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
+  private readonly deliveryFee = 50;
   private readonly cartItemsSignal = signal<CartItem[]>([]);
   private readonly wishListSignal = signal<CartItem[]>([]);
 
@@ -24,11 +32,33 @@ export class CartService {
     return this.wishListSignal().reduce((total, item) => total + item.quantity, 0) ?? 0;
   });
 
+  readonly totals = computed<CartTotals>(() => {
+    const subtotal = this.cartItemsSignal().reduce(
+      (total, item) => total + this.getOriginalPrice(item.book) * item.quantity,
+      0,
+    );
+    const discount = this.cartItemsSignal().reduce(
+      (total, item) => total + this.getDiscountPerBook(item.book) * item.quantity,
+      0,
+    );
+    const delivery = this.cartItemsSignal().length > 0 ? this.deliveryFee : 0;
+
+    return { subtotal, discount, delivery, total: subtotal - discount + delivery };
+  });
+
   addToCart(book: AdminBook): void {
+    if (book.stock <= 0) {
+      return;
+    }
+
     this.cartItemsSignal.update((items) => {
-      const currentCartItem = items?.find((item) => item.book.id === book.id);
+      const currentCartItem = items.find((item) => item.book.id === book.id);
       if (currentCartItem) {
-        return items?.map((item) =>
+        if (currentCartItem.quantity >= book.stock) {
+          return items;
+        }
+
+        return items.map((item) =>
           item.book.id === book.id
             ? {
                 ...item,
@@ -45,6 +75,43 @@ export class CartService {
         },
       ];
     });
+  }
+
+  increaseQuantity(bookId: string): void {
+    this.cartItemsSignal.update((items) =>
+      items.map((item) =>
+        item.book.id === bookId && item.quantity < item.book.stock
+          ? { ...item, quantity: item.quantity + 1 }
+          : item,
+      ),
+    );
+  }
+
+  decreaseQuantity(bookId: string): void {
+    this.cartItemsSignal.update((items) =>
+      items.map((item) =>
+        item.book.id === bookId && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item,
+      ),
+    );
+  }
+
+  removeFromCart(bookId: string): void {
+    this.cartItemsSignal.update((items) => items.filter((item) => item.book.id !== bookId));
+  }
+
+  getUnitPrice(book: AdminBook): number {
+    const { listPrice, salePrice } = book.pricing;
+    return salePrice > 0 && salePrice < listPrice ? salePrice : listPrice;
+  }
+
+  getOriginalPrice(book: AdminBook): number {
+    return book.pricing.listPrice;
+  }
+
+  private getDiscountPerBook(book: AdminBook): number {
+    return Math.max(0, this.getOriginalPrice(book) - this.getUnitPrice(book));
   }
 
   addToWishList(book: AdminBook): void {
@@ -68,5 +135,13 @@ export class CartService {
         },
       ];
     });
+  }
+
+  resetCartCountWhenLogout() : void {
+    this.cartItemsSignal.set([]);
+  }
+
+  resetWishListCountWhenLogout() : void {
+    this.wishListSignal.set([]);
   }
 }

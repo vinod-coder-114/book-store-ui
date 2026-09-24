@@ -4,9 +4,11 @@ import { AppFooter } from './components/footer/footer';
 import { Header } from './components/header/header';
 import { AuthSessionService, UserRole } from './services/auth-session.service';
 import { BookService } from './services/book.service';
+import { CartService } from './services/cart-service';
+import { Toaster } from './shared/components/toaster/toaster';
 
 @Component({
-  imports: [Header, AppFooter, RouterOutlet],
+  imports: [Header, AppFooter, RouterOutlet, Toaster],
   selector: 'app-root',
   styleUrls: ['./app.css'],
   templateUrl: './app.html',
@@ -17,6 +19,7 @@ export class App {
     private readonly authSessionService: AuthSessionService,
     private readonly bookService: BookService,
     private readonly router: Router,
+    private readonly cartService: CartService
   ) {}
 
   get isLoggedIn(): boolean {
@@ -51,6 +54,8 @@ export class App {
 
   private completeLogout(): void {
     this.authSessionService.clearSession();
+    this.cartService.resetCartCountWhenLogout();
+    this.cartService.resetWishListCountWhenLogout();
     void this.router.navigate(['/']);
   }
 }

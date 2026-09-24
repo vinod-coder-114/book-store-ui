@@ -1,1 +1,77 @@
-<p>cart works!</p>
+<main class="cart-page container py-4 py-lg-5">
+  <div class="d-flex flex-wrap align-items-baseline justify-content-between gap-2 mb-4">
+    <div>
+      <h1 class="mb-1">Shopping Cart</h1>
+      @if (cartItems().length > 0) {
+        <p class="text-muted mb-0">Review your books before checkout.</p>
+      }
+    </div>
+    @if (cartItems().length > 0) {
+      <a class="continue-link" routerLink="/books">Continue shopping</a>
+    }
+  </div>
+
+  @if (cartItems().length === 0) {
+    <section class="empty-cart card border-0 shadow-sm text-center mx-auto" aria-labelledby="empty-cart-title">
+      <div class="empty-cart-icon" aria-hidden="true">🛒</div>
+      <h2 id="empty-cart-title" class="h3">Your cart is empty</h2>
+      <p class="text-muted mb-4">Looks like you haven't added anything to your cart yet.</p>
+      <a class="btn btn-primary px-4" routerLink="/books">Browse books</a>
+    </section>
+  } @else {
+    <div class="row g-4 align-items-start">
+      <section class="col-lg-8" aria-label="Cart items">
+        <div class="cart-items card border-0 shadow-sm">
+          @for (item of cartItems(); track item.book.id) {
+            <article class="cart-item">
+              @if (coverUrl(item); as imageUrl) {
+                <img class="book-cover" [src]="imageUrl" [alt]="item.book.title + ' cover'" />
+              } @else {
+                <div class="book-cover book-cover-placeholder" aria-label="No cover available">No cover</div>
+              }
+
+              <div class="book-details">
+                <p class="book-meta mb-1">{{ item.book.genre }} · {{ item.book.format }}</p>
+                <h2 class="h5 mb-1">{{ item.book.title }}</h2>
+                <p class="text-muted mb-3">by {{ item.book.author }}</p>
+                <div class="d-flex flex-wrap align-items-center gap-3">
+                  <div>
+                    <span class="price">{{ unitPrice(item) | currency: 'INR' : 'symbol' : '1.0-0' }}</span>
+                    @if (originalPrice(item) > unitPrice(item)) {
+                      <span class="original-price ms-2">{{ originalPrice(item) | currency: 'INR' : 'symbol' : '1.0-0' }}</span>
+                    }
+                  </div>
+                  <div class="quantity-control" aria-label="Quantity for {{ item.book.title }}">
+                    <button type="button" class="btn btn-outline-secondary" [disabled]="item.quantity === 1" (click)="decreaseQuantity(item)" [attr.aria-label]="'Decrease quantity of ' + item.book.title">−</button>
+                    <output aria-live="polite" [attr.aria-label]="item.quantity + ' copies'">{{ item.quantity }}</output>
+                    <button type="button" class="btn btn-outline-secondary" [disabled]="item.quantity >= item.book.stock" (click)="increaseQuantity(item)" [attr.aria-label]="'Increase quantity of ' + item.book.title">+</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="item-actions">
+                <p class="item-total mb-3">{{ unitPrice(item) * item.quantity | currency: 'INR' : 'symbol' : '1.0-0' }}</p>
+                <button type="button" class="btn btn-link text-danger p-0" (click)="removeItem(item)" [attr.aria-label]="'Remove ' + item.book.title + ' from cart'">Remove</button>
+              </div>
+            </article>
+          }
+        </div>
+      </section>
+
+      <aside class="col-lg-4" aria-label="Order summary">
+        <section class="summary-card card border-0 shadow-sm">
+          <div class="card-body p-4">
+            <h2 class="h4 mb-4">Cart summary</h2>
+            <dl class="summary-lines mb-4">
+              <div><dt>Subtotal</dt><dd>{{ totals().subtotal | currency: 'INR' : 'symbol' : '1.0-0' }}</dd></div>
+              <div><dt>Discount</dt><dd class="text-success">−{{ totals().discount | currency: 'INR' : 'symbol' : '1.0-0' }}</dd></div>
+              <div><dt>Delivery</dt><dd>{{ totals().delivery | currency: 'INR' : 'symbol' : '1.0-0' }}</dd></div>
+              <div class="summary-total"><dt>Total</dt><dd>{{ totals().total | currency: 'INR' : 'symbol' : '1.0-0' }}</dd></div>
+            </dl>
+            <a class="btn btn-primary w-100 py-2" routerLink="/user/checkout">Proceed to checkout</a>
+          </div>
+        </section>
+      </aside>
+    </div>
+  }
+</main>

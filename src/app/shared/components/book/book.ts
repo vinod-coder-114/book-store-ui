@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AdminBook } from '../../../pages/admin/admin.model';
 import { environment } from '../../../../environments/environment.dev';
 import { AuthSessionService } from '../../../services/auth-session.service';
+import { ToastService } from '../../../services/toast-service';
 
 @Component({
   imports: [CurrencyPipe],
@@ -19,12 +20,22 @@ export class BookCardComponent {
   protected router = inject(Router);
 
   private readonly cartService = inject(CartService);
+  private readonly toastService = inject(ToastService);
   
   protected readonly showingBackCover = signal(false);
 
-  // protected readonly activeImage = computed(() =>
-  //   this.showingBackCover() ? this.backImage() : this.frontImage(),
-  // );
+  //  notification system when user added the book to cart or whishlist
+  protected readonly notificationMessage = signal<string | null>(null);
+  private notificationTimer?: ReturnType<typeof setTimeout>;
+
+  private showNotification(message:string):void {
+    clearTimeout(this.notificationTimer);
+    this.notificationMessage.set(message);
+
+    this.notificationTimer = setTimeout(() =>{
+      this.notificationMessage.set(null);
+    }, 3000);
+  }
 
   protected showFrontCover(): void {
     this.showingBackCover.set(false);
@@ -42,10 +53,10 @@ export class BookCardComponent {
       console.log(`Book added to cart: ${book.title}`);
       // You can add additional logic here if needed, such as updating the UI or notifying the user.
       this.cartService.addToCart(book);
+      this.toastService.show(`"${book.title}" was added to your cart.`);
     } else {
       // Prompt the user to log in
       this.router.navigate(['/login']);
-      
     }
   }
 
@@ -55,5 +66,6 @@ export class BookCardComponent {
         return;
     } 
     this.cartService.addToWishList(this.book());
+    this.toastService.show(`"${this.book().title}" was added to your wishlist`);
   }
 }
