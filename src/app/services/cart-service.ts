@@ -1,5 +1,6 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import type { AdminBook } from '../pages/admin/admin.model';
+import { ToastService } from './toast-service';
 
 export interface CartItem {
   book: AdminBook;
@@ -24,6 +25,8 @@ export class CartService {
   readonly cartItems = this.cartItemsSignal.asReadonly();
   readonly wishListItems = this.wishListSignal.asReadonly();
 
+  private readonly toastService = inject(ToastService);
+
   readonly cartItemCount = computed(() => {
     return this.cartItemsSignal().reduce((total, item) => total + item.quantity, 0) ?? 0;
   });
@@ -46,15 +49,16 @@ export class CartService {
     return { subtotal, discount, delivery, total: subtotal - discount + delivery };
   });
 
-  addToCart(book: AdminBook): void {
-    if (book.stock <= 0) {
-      return;
+  addToCart(book: AdminBook): boolean {
+    const currentCartItem = this.cartItemsSignal().find((item) => item.book.id === book.id);
+    if (book.stock <= 0|| (currentCartItem && currentCartItem.quantity >= book.stock)) {
+      return false;
     }
-
+    
     this.cartItemsSignal.update((items) => {
-      const currentCartItem = items.find((item) => item.book.id === book.id);
       if (currentCartItem) {
         if (currentCartItem.quantity >= book.stock) {
+          this.toastService.show(`"${currentCartItem.book.title}" exceeds available stock.`, 'error');
           return items;
         }
 
@@ -75,6 +79,7 @@ export class CartService {
         },
       ];
     });
+    return true;
   }
 
   increaseQuantity(bookId: string): void {
@@ -143,5 +148,13 @@ export class CartService {
 
   resetWishListCountWhenLogout() : void {
     this.wishListSignal.set([]);
+  }
+
+  getCartItems(): CartItem[] {
+    return this.cartItemsSignal();
+  }
+  
+  getWishListItems(): CartItem[] {
+    return this.wishListSignal();
   }
 }

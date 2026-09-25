@@ -6,6 +6,7 @@ import { AdminBook } from '../../../pages/admin/admin.model';
 import { environment } from '../../../../environments/environment.dev';
 import { AuthSessionService } from '../../../services/auth-session.service';
 import { ToastService } from '../../../services/toast-service';
+import { CartItem } from '../../../services/cart-service';
 
 @Component({
   imports: [CurrencyPipe],
@@ -21,18 +22,18 @@ export class BookCardComponent {
 
   private readonly cartService = inject(CartService);
   private readonly toastService = inject(ToastService);
-  
+
   protected readonly showingBackCover = signal(false);
 
   //  notification system when user added the book to cart or whishlist
   protected readonly notificationMessage = signal<string | null>(null);
   private notificationTimer?: ReturnType<typeof setTimeout>;
 
-  private showNotification(message:string):void {
+  private showNotification(message: string): void {
     clearTimeout(this.notificationTimer);
     this.notificationMessage.set(message);
 
-    this.notificationTimer = setTimeout(() =>{
+    this.notificationTimer = setTimeout(() => {
       this.notificationMessage.set(null);
     }, 3000);
   }
@@ -52,19 +53,24 @@ export class BookCardComponent {
       // Add the book to the user's cart
       console.log(`Book added to cart: ${book.title}`);
       // You can add additional logic here if needed, such as updating the UI or notifying the user.
-      this.cartService.addToCart(book);
-      this.toastService.show(`"${book.title}" was added to your cart.`);
+      const added: boolean = this.cartService.addToCart(book);
+
+      this.toastService.show(
+        added
+          ? `"${book.title}" was added to your cart.`
+          : `"${book.title}" exceeds available stock.`,
+        added ? 'success' : 'error',
+      );
     } else {
-      // Prompt the user to log in
       this.router.navigate(['/login']);
     }
   }
 
   addToWishList(): void {
-    if(!this.authService.isAuthenticated()) {
-        this.router.navigate(['/login']);
-        return;
-    } 
+    if (!this.authService.isAuthenticated()) {
+      this.router.navigate(['/login']);
+      return;
+    }
     this.cartService.addToWishList(this.book());
     this.toastService.show(`"${this.book().title}" was added to your wishlist`);
   }

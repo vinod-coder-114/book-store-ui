@@ -94,7 +94,15 @@
 .price-row {
 	display: flex;
 	align-items: baseline;
-	gap: 0.65rem;
+	justify-content: space-between;
+	gap: 0.5rem;
+	min-width: 0;
+}
+
+.price-details {
+	min-width: 0;
+	overflow: hidden;
+	white-space: nowrap;
 }
 
 .book-price {
@@ -107,12 +115,18 @@
 	font-size: 0.88rem;
 	color: var(--app-muted);
 	text-decoration: line-through;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .rating {
 	font-size: 0.85rem;
 	font-weight: 600;
 	color: #b45309;
+	white-space: nowrap;
+	margin-left: auto;
+	flex-shrink: 0;
 }
 
 
