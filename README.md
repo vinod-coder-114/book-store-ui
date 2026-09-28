@@ -1,59 +1,96 @@
-# BookStoreUi
+# Book Store UI
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.1.6.
+An Angular storefront for browsing books, managing a reading cart and wishlist, and administering the book catalog. The client is designed to work with the Book Store backend API.
 
-## Development server
+## What the app includes
 
-To start a local development server, run:
+- A responsive home page with category shortcuts, featured books, promotions, and newsletter call-to-action
+- A searchable book catalog (searches by title or author)
+- Front- and back-cover previews, ratings, prices, stock status, and add-to-cart actions
+- Customer sign-up and login, with session-based authentication
+- A protected cart with quantity controls, stock limits, and an order summary
+- A wishlist counter and in-app toast notifications
+- A protected admin book-management page for adding, editing, uploading cover images for, and deleting books
 
-```bash
-ng serve
-```
+## Tech stack
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Angular 22 with standalone components and signals
+- TypeScript
+- Bootstrap 5 and Bootstrap Icons
+- Angular Reactive Forms and HttpClient
+- Vitest via the Angular CLI test runner
 
-## Code scaffolding
+## Prerequisites
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- Node.js compatible with Angular 22
+- npm (the project specifies `npm@12.0.2`)
+- A running Book Store backend API at `http://localhost:8080/book-store`
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+## Run locally
 
 ```bash
-ng build
+npm install
+npm start
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Open `http://localhost:4200/` after the development server starts.
 
-## Running unit tests
+The API host and endpoints are configured in [src/environments/environment.dev.ts](src/environments/environment.dev.ts). Update this file if your backend runs at a different address.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## Available scripts
 
 ```bash
-ng test
+# Start the development server
+npm start
+
+# Create a production build in dist/
+npm run build
+
+# Run unit tests
+npm test
 ```
 
-## Running end-to-end tests
+## Application routes
 
-For end-to-end (e2e) testing, run:
+| Route | Purpose | Access |
+| --- | --- | --- |
+| `/` | Home page | Public |
+| `/books` | Searchable book catalog | Public |
+| `/login` | Customer and admin sign-in | Public |
+| `/signup` | Account registration | Public |
+| `/user/cart` | Shopping cart and totals | Signed in |
+| `/user/checkout` | Checkout placeholder | Signed in |
+| `/user/account` | Account placeholder | Signed in |
+| `/admin/books` | Manage the book catalog | Signed in (admin link is role-aware) |
 
-```bash
-ng e2e
+Unauthenticated cart and book actions redirect the user to the login page. Authentication details are stored in `sessionStorage`; cart and wishlist data are kept in the client for the active session.
+
+## API integration
+
+The UI currently calls these backend areas:
+
+- User registration, login, and logout
+- Catalog book listing
+- Admin book creation, update, and deletion
+
+Book covers are loaded from the backend host. Admin create and update requests submit book data as multipart form data and can include front and back cover image files.
+
+## Project structure
+
+```text
+src/
+  app/
+    components/       # Header and footer
+    pages/            # Home, catalog, auth, cart, checkout, account, admin
+    services/         # API, session, cart, and notification state
+    shared/           # Reusable book card, toaster, and confirmation dialog
+  environments/       # API configuration
+public/
+  icons/              # UI icons
+  images/             # Home-page artwork and promotional banners
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Notes
 
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- The checkout and account routes currently render placeholder content.
+- The frontend expects the backend to supply catalog data and book-cover URLs, so featured cards and catalog results are empty if the API is unavailable.
