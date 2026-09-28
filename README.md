@@ -94,3 +94,6 @@ public/
 
 - The checkout and account routes currently render placeholder content.
 - The frontend expects the backend to supply catalog data and book-cover URLs, so featured cards and catalog results are empty if the API is unavailable.
+
+
+![alt text](image.png)
