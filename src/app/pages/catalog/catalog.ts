@@ -1,10 +1,11 @@
-import { Component, inject} from '@angular/core';
+import { Component, inject, computed, signal } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BookCardComponent } from '../../shared/components/book/book';
 import type { AdminBook } from '../admin/admin.model';
-import { AdminService } from '../../services/admin.service';
 import { environment } from '../../../environments/environment.dev';
 import { toSignal } from '@angular/core/rxjs-interop';
-
+import { BookService } from '../../services/book.service';
 
 @Component({
   imports: [BookCardComponent],
@@ -14,9 +15,30 @@ import { toSignal } from '@angular/core/rxjs-interop';
   templateUrl: './catalog.html',
 })
 export class Catalog {
-  private readonly adminService: AdminService = inject(AdminService);
+  private readonly bookService = inject(BookService);
+  private readonly route = inject(ActivatedRoute);
 
-  books = toSignal(this.adminService.getBooksInformation(), { initialValue: [] });
+  allBooks = toSignal(this.bookService.getBooksInformation(), { initialValue: [] });
+
+  private readonly searchTerm = toSignal(
+    this.route.queryParamMap.pipe(map((params) => (params.get('q') ?? '').toLowerCase())),
+    { initialValue: '' },
+  );
+
+  books = computed(() => {
+    const search = this.searchTerm();
+    // const search = this.bookService.getSearchTerm();
+    console.log(`Search query: ${search}`);
+
+    if (!search) {
+      return this.allBooks();
+    }
+
+    return this.allBooks().filter(
+      (book) =>
+        book.title.toLowerCase().includes(search) || book.author.toLowerCase().includes(search),
+    );
+  });
 
   protected frontImageUrl(book: AdminBook): string {
     return this.toAbsoluteUrl(book.images?.find((image) => image.primary)?.downloadUrl);

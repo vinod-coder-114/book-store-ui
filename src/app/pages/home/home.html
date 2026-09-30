@@ -85,7 +85,7 @@
     <div class="row g-3">
       @for (category of catagoriesSignal(); track category.name) {
         <div class="col-6 col-md-4 col-lg-3 col-xl">
-          <a href="['/book']" class="text-decoration-none">
+          <a routerLink="/books" class="text-decoration-none">
             <div
               class="category-card"
               [class.category-fiction]="category.name === 'Fiction'"
@@ -127,7 +127,7 @@
         <p class="text-secondary mb-0">Popular books our readers love.</p>
       </div>
 
-      <a routerLink="/book" class="btn btn-outline-primary">
+      <a routerLink="/books" class="btn btn-outline-primary">
         View All Books
         <i class="bi bi-arrow-right ms-1"></i>
       </a>
@@ -135,10 +135,10 @@
 
     <!-- Featured books -->
 
-    <div class="row">
+    <div class="row g-4">
       @for (book of featuredBooks(); track book.id) {
         <div class="col-3">
-          <app-book [book]="book"> </app-book>
+          <app-book [book]="book" > </app-book>
         </div>
       }
     </div>
@@ -156,7 +156,7 @@
         <div class="promo-card promo-discount rounded-4 p-4 p-lg-5">
           <h2 class="fw-bold">Flat <span class="text-danger">30% OFF</span></h2>
           <p class="text-secondary">On bestselling books. Build your reading collection today.</p>
-          <a routerLink="/book" class="btn btn-dark">
+          <a routerLink="/books" class="btn btn-dark">
             Shop Now
             <i class="bi bi-arrow-right ms-2"></i>
           </a>

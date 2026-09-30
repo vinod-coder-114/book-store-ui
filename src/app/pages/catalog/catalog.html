@@ -11,16 +11,6 @@
 		@for (book of books(); track book.id) {
 			<div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
 				<app-book
-					/* [title]="book.title"
-					[author]="book.author"
-					[frontImage]="frontImageUrl(book)"
-					[backImage]="backImageUrl(book)"
-					[price]="book.pricing.salePrice"
-					[originalPrice]="book.pricing.listPrice"
-					[genre]="book.genre"
-					[format]="book.format"
-					[rating]="book.rating.average"
-					[ratingCount]="book.rating.count" */
 					[book]="book"
 				></app-book>
 			</div>

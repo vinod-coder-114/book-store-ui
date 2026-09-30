@@ -3,9 +3,10 @@ import { AdminService } from '../../services/admin.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AdminBook } from '../admin/admin.model';
 import { BookCardComponent } from '../../shared/components/book/book';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  imports: [BookCardComponent],
+  imports: [BookCardComponent, RouterLink],
   selector: 'app-home',
   styleUrl: './home.css',
   templateUrl: './home.html',

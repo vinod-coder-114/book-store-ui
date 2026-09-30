@@ -1,8 +1,10 @@
 import { NgOptimizedImage } from '@angular/common';
 import { Component, computed, inject, input, output, signal } from '@angular/core';
+import { BookService } from '../../services/book.service';
 import { CartService } from '../../services/cart-service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../environments/environment.dev';
 
 @Component({
   imports: [NgOptimizedImage, RouterLink, RouterLinkActive, FormsModule],
@@ -16,6 +18,8 @@ export class Header {
 
   private readonly router = inject(Router);
   private readonly cartService = inject(CartService);
+  private readonly bookService = inject(BookService);
+  
 
   readonly isLoggedIn = input(false);
   readonly userName = input('Guest');
@@ -52,12 +56,18 @@ export class Header {
 
   protected onSearchSubmit(event: Event): void {
     event.preventDefault();
-    const search = this.searchQuery().trim();
+    const search = this.searchText.trim();
+    console.log(`Search query submitted: ${search}`);
     this.closeMenu();
     this.closeUserMenu();
-    void this.router.navigate(['/books'], {
-      queryParams: search ? { q: search } : {},
-    });
+    
+    if(environment.enableBookSearchUsingQueryParam) {
+      void this.router.navigate(['/books'], {
+        queryParams: search ? { q: search } : {},
+      });
+    } else {
+      this.bookService.setSearchTerm(search);
+    }
   }
 
   protected logout(): void {
