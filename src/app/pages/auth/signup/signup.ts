@@ -1,4 +1,10 @@
-import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -14,6 +20,7 @@ type SignupPayload = {
   password: string;
   confirm_password: string;
   terms: boolean;
+  role: string;
 };
 
 @Component({
@@ -43,6 +50,7 @@ export class Signup {
       password: ['', [Validators.required, Validators.minLength(8)]],
       confirm_password: ['', [Validators.required, Validators.minLength(8)]],
       terms: [false, [Validators.requiredTrue]],
+      role: ['user'],
     },
     { validators: [Signup.passwordsMatchValidator] },
   );
@@ -61,6 +69,11 @@ export class Signup {
     return (this.submitted() || control.touched) && control.invalid;
   }
 
+  setRole(event: Event): void {
+    const isAdmin = (event.target as HTMLInputElement).checked;
+    this.signupForm.controls.role.setValue(isAdmin ? 'admin' : 'user');
+  }
+
   onSubmit(): void {
     this.submitted.set(true);
     this.submitError.set('');
@@ -72,6 +85,8 @@ export class Signup {
     this.isSubmitting.set(true);
 
     const payload = this.toPayload();
+    console.log('Payload ', payload);
+
     void this.callSignupApi(payload);
   }
 
@@ -87,13 +102,14 @@ export class Signup {
       password: formValue.password,
       confirm_password: formValue.confirm_password,
       terms: formValue.terms,
+      role: formValue.role === 'admin' ? 'admin' : 'user',
     };
   }
 
   private async callSignupApi(payload: SignupPayload): Promise<void> {
     try {
       await firstValueFrom(this.bookService.registerUser(payload));
-      
+
       this.submitSuccess.set('Account created successfully.');
       this.signupForm.reset({
         first_name: '',
@@ -105,6 +121,7 @@ export class Signup {
         password: '',
         confirm_password: '',
         terms: false,
+        role: 'user',
       });
       this.submitted.set(false);
       await this.router.navigate(['/login']);
