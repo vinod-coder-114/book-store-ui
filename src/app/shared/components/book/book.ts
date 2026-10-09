@@ -47,23 +47,21 @@ export class BookCardComponent {
   }
 
   addToCart(book: AdminBook): void {
-    // Implement the logic to add the book to the cart
-    console.log(`Adding book to cart: ${book.title}`);
-    if (this.authService.isAuthenticated()) {
-      // Add the book to the user's cart
-      console.log(`Book added to cart: ${book.title}`);
-      // You can add additional logic here if needed, such as updating the UI or notifying the user.
-      const added: boolean = this.cartService.addToCart(book);
-
-      this.toastService.show(
-        added
-          ? `"${book.title}" was added to your cart.`
-          : `"${book.title}" exceeds available stock.`,
-        added ? 'success' : 'error',
-      );
-    } else {
+    if (!this.authService.isAuthenticated()) {
       this.router.navigate(['/login']);
+      return;
     }
+
+    if (!this.cartService.canAddToCart(book)) {
+      this.toastService.show(`"${book.title}" exceeds available stock.`, 'error');
+      return;
+    }
+
+    this.cartService.addToCart(book).subscribe({
+      next: () => this.toastService.show(`"${book.title}" was added to your cart.`, 'success'),
+      error: () =>
+        this.toastService.show(`Could not add "${book.title}" to your cart.`, 'error'),
+    });
   }
 
   addToWishList(): void {
