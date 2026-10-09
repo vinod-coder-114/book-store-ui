@@ -14,10 +14,14 @@ export const environment = {
     manageBooksUrl: `/api/admin/books`,
     manageUsersUrl: `/api/admin/users`,
   },
-  catalog:{
+  cart: {
+    addItemUrl: `/api/carts/items`,
+    getItemsUrl: `/api/carts`,
+  },
+  catalog: {
     listBooksUrl: `/api/catalog/books`,
-    bookDetailsUrl: `/api/catalog/books/:id`,
+    bookDetailsUrl: (id: string) => `/api/catalog/books/${id}`,
     searchBooksUrl: `/api/catalog/books/search`,
     featuredBooksUrl: `/api/catalog/books/featured`,
-  }
+  },
 };
