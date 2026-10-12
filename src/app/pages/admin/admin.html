@@ -46,11 +46,11 @@
 						</div>
 						<div class="col-4">
 							<label class="form-label" for="salePrice">Sale Price</label>
-							<input id="salePrice" class="form-control" type="number" min="0" formControlName="salePrice" />
+							<input id="salePrice" class="form-control" type="number" min="0" step="0.01" formControlName="salePrice" />
 						</div>
 						<div class="col-4">
 							<label class="form-label" for="listPrice">List Price</label>
-							<input id="listPrice" class="form-control" type="number" min="0" formControlName="listPrice" />
+							<input id="listPrice" class="form-control" type="number" min="0" step="0.01" formControlName="listPrice" />
 						</div>
 					</div>
 
@@ -117,9 +117,9 @@
 						<td>{{ book.author }}</td>
 						<td>{{ book.genre }} / {{ book.format }}</td>
 						<td>
-							{{ book.pricing.salePrice | currency: book.pricing.currency }}
+							{{ book.pricing.salePrice | currency: book.pricing.currency : 'symbol' : '1.2-2' }}
 							<div class="text-muted text-decoration-line-through small">
-								{{ book.pricing.listPrice | currency: book.pricing.currency }}
+								{{ book.pricing.listPrice | currency: book.pricing.currency : 'symbol' : '1.2-2' }}
 							</div>
 						</td>
 						<td>{{ book.rating.average }} ★ ({{ book.rating.count }})</td>
@@ -168,7 +168,7 @@
 					<p class="fw-semibold mb-0">{{ book.title }}</p>
 					<p class="text-muted mb-0">by {{ book.author }}</p>
 					<p class="text-muted mb-0">{{ book.genre }} / {{ book.format }}</p>
-					<p class="mb-0">{{ book.pricing.salePrice | currency: book.pricing.currency }}</p>
+					<p class="mb-0">{{ book.pricing.salePrice | currency: book.pricing.currency : 'symbol' : '1.2-2' }}</p>
 				</div>
 			</div>
 		</app-confirm-dialog>

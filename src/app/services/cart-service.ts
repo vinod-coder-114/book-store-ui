@@ -161,7 +161,24 @@ export class CartService {
   }
 
   removeFromCart(bookId: string): void {
-    this.cartItemsSignal.update((items) => items.filter((item) => item.book.id !== bookId));
+    this.deleteFromCart(bookId).subscribe({
+      next: (response) => {
+        this.serverSubtotal.set(response.subtotal);
+        this.cartItemsSignal.update((items) => items.filter((item) => item.book.id !== bookId));
+      },
+      error: (error) => {
+        console.error('Remove from cart failed', error);
+        alert('Remove from cart failed! ' + error.message);
+      },
+    });
+  }
+
+  private deleteFromCart(bookId: string): Observable<CartResponse> {
+    const headers = this.bookService.buildAuthHeaders();
+    return this.http.delete<CartResponse>(
+      `${environment.apiUrl + environment.cart.addItemUrl + `/${bookId}`}`,
+      { headers },
+    );
   }
 
   getUnitPrice(book: AdminBook): number {
