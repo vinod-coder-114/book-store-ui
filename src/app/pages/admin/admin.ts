@@ -20,7 +20,7 @@ export class Admin {
   protected readonly books = signal<AdminBook[]>([]);
   constructor(private adminService: AdminService) {
     this.adminService.getBooksInformation().subscribe((books) => {
-      this.books.set(books);
+      this.books.set(books.map((book) => this.withRoundedPrices(book)));
     });
   }
 
@@ -39,8 +39,8 @@ export class Admin {
     format: ['Paperback', Validators.required],
     pricing: this.fb.nonNullable.group({
       currency: ['INR', Validators.required],
-      salePrice: [0, [Validators.required, Validators.min(0)]],
-      listPrice: [0, [Validators.required, Validators.min(0)]],
+      salePrice: [0.0, Validators.min(0)],
+      listPrice: [0.0, Validators.min(0)],
     }),
     rating: this.fb.nonNullable.group({
       average: [0, [Validators.required, Validators.min(0), Validators.max(5)]],
@@ -56,7 +56,7 @@ export class Admin {
       author: '',
       genre: '',
       format: 'Paperback',
-      pricing: { currency: 'INR', salePrice: 0, listPrice: 0 },
+      pricing: { currency: 'INR', salePrice: 0.0, listPrice: 0.0 },
       rating: { average: 0, count: 0 },
       stock: 0,
     });
@@ -76,15 +76,23 @@ export class Admin {
       author: book.author,
       genre: book.genre,
       format: book.format,
-      pricing: book.pricing,
+      pricing: {
+        currency: book.pricing?.currency ?? 'INR',
+        salePrice: book.pricing?.salePrice ?? 0,
+        listPrice: book.pricing?.listPrice ?? 0,
+      },
       rating: book.rating,
       stock: book.stock,
     });
     this.existingImages.set(book.images ?? []);
     this.frontImageFile = null;
     this.backImageFile = null;
-    this.frontImagePreview.set(this.toAbsoluteUrl(book.images?.find((image) => image.primary)?.downloadUrl));
-    this.backImagePreview.set(this.toAbsoluteUrl(book.images?.find((image) => !image.primary)?.downloadUrl));
+    this.frontImagePreview.set(
+      this.toAbsoluteUrl(book.images?.find((image) => image.primary)?.downloadUrl),
+    );
+    this.backImagePreview.set(
+      this.toAbsoluteUrl(book.images?.find((image) => !image.primary)?.downloadUrl),
+    );
     this.showForm.set(true);
     this.scrollToForm();
   }
@@ -94,7 +102,9 @@ export class Admin {
     if (!url) {
       return null;
     }
-    return url.startsWith('data:') || url.startsWith('http') ? url : `${this.environment.hostUrl + url}`;
+    return url.startsWith('data:') || url.startsWith('http')
+      ? url
+      : `${this.environment.hostUrl + url}`;
   }
 
   protected cancelForm(): void {
@@ -115,22 +125,37 @@ export class Admin {
     this.readImageFile(event, this.backImagePreview, (file) => (this.backImageFile = file));
   }
 
+  // Treat omitted prices as zero so blank inputs never prevent a valid book save.
   protected saveBook(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
-    const values = this.form.getRawValue();
+    const formValues = this.form.getRawValue();
+    const values = {
+      ...formValues,
+      pricing: {
+        ...formValues.pricing,
+        salePrice: this.roundPrice(formValues.pricing.salePrice),
+        listPrice: this.roundPrice(formValues.pricing.listPrice),
+      },
+    };
     const editingId = this.editingId();
 
     if (editingId !== null) {
       const images = this.buildImages();
       this.adminService
         .updateBook(editingId, values, this.frontImageFile, this.backImageFile)
-        .subscribe(() => {
+        .subscribe((updatedBook) => {
+          const savedBook = this.withRoundedPrices({
+            ...values,
+            ...updatedBook,
+            pricing: updatedBook?.pricing ?? values.pricing,
+            images: updatedBook?.images ?? images,
+          });
           this.books.update((books) =>
-            books.map((book) => (book.id === editingId ? { ...book, ...values, images } : book)),
+            books.map((book) => (book.id === editingId ? savedBook : book)),
           );
           this.cancelForm();
         });
@@ -143,14 +168,30 @@ export class Admin {
 
     this.adminService.addBook(values, images).subscribe({
       next: (book) => {
-        this.books.update((books) => [...books, book]);
+        this.books.update((books) => [...books, this.withRoundedPrices(book)]);
         this.cancelForm();
       },
       error: (error) => {
         console.error('Add book failed', error);
         alert('Add book failed! ' + error.message);
-      }
+      },
     });
+  }
+
+  private withRoundedPrices(book: AdminBook): AdminBook {
+    const pricing = book.pricing ?? { currency: 'INR', salePrice: 0, listPrice: 0 };
+    return {
+      ...book,
+      pricing: {
+        ...pricing,
+        salePrice: this.roundPrice(pricing.salePrice),
+        listPrice: this.roundPrice(pricing.listPrice),
+      },
+    };
+  }
+
+  private roundPrice(price: number | null | undefined): number {
+    return Math.round(((price ?? 0) + Number.EPSILON) * 100) / 100;
   }
 
   protected readonly bookPendingDelete = signal<AdminBook | null>(null);
@@ -176,8 +217,8 @@ export class Admin {
       // capture and handle errors during delete operation
       error: (error) => {
         console.error('Delete failed', error);
-        alert('Delete failed! '+ error.message);
-      }
+        alert('Delete failed! ' + error.message);
+      },
     });
   }
 
@@ -190,7 +231,9 @@ export class Admin {
 
   // Waits a tick so the @if-rendered form section exists before scrolling to it
   private scrollToForm(): void {
-    setTimeout(() => this.formSection?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    setTimeout(() =>
+      this.formSection?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' }),
+    );
   }
 
   protected primaryImageUrl(images: BookImage[]): string | null {
@@ -259,4 +302,3 @@ export class Admin {
     reader.readAsDataURL(file);
   }
 }
-
