@@ -30,4 +30,11 @@ jobs:
 
       # - name: Run Unit Tests
       #   run: npm test --watch=false
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bookstore-build
+          path: dist
+          
       
