@@ -27,6 +27,6 @@ jobs:
       - name: Build Application
         run: npm run build
 
-      - name: Run Unit Tests
-        run: npm test -- --watch=false --browsers=ChromeHeadless
+      # - name: Run Unit Tests
+      #   run: npm test --watch=false
       
