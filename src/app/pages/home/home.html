@@ -32,7 +32,6 @@
             </a>
           </div>
 
-
           <div class="hero-stats mt-5 row justify-content-start d-flex gap-4">
             <div class="hero-stat col-2 d-flex justify-content-center gap-3 align-items-center">
               <i class="bi bi-book text-primary fs-1"></i>
@@ -138,7 +137,7 @@
     <div class="row g-4">
       @for (book of featuredBooks(); track book.id) {
         <div class="col-3">
-          <app-book [book]="book" > </app-book>
+          <app-book [book]="book"> </app-book>
         </div>
       }
     </div>
@@ -259,13 +258,7 @@
       </div>
 
       <div class="col-6 d-flex">
-
-        <input
-          type="email"
-          class="form-control"
-          placeholder="Enter your email address"
-        />
-
+        <input type="email" class="form-control" placeholder="Enter your email address" />
         <button class="btn btn-primary">Subscribe</button>
       </div>
     </div>
