@@ -11,7 +11,8 @@
   min-height: 600px;
   border-radius: 10px;
 
-  background-image: url('/images/hero-section-img.png');
+  /* background-image: url('/images/hero-section-img.png'); */
+  background-image: url('../../../../public/images/hero-section-img.png');
 
   background-size: cover;
   background-position: center;
@@ -24,29 +25,22 @@
   max-width: 100%;
 }
 
-
 /* Content is positioned over the image */
 
 .hero-content {
-
   min-height: 600px;
 
   display: flex;
   align-items: center;
-
 }
-
 
 /* Keep text on the left */
 
 .hero-text {
-
   width: 58%;
 
   padding: 60px 0;
-
 }
-
 
 /* Make the text easier to read over image */
 
@@ -57,7 +51,6 @@
 .hero-text p {
   max-width: 650px;
 }
-
 
 /* Statistics */
 
@@ -71,14 +64,10 @@
   min-width: 135px;
 }
 
-
-
 /* Mobile */
 
 @media (max-width: 991.98px) {
-
   .hero-background {
-
     min-height: 650px;
 
     /*
@@ -86,7 +75,6 @@
      * so the books don't cover the text.
      */
     background-position: 65% center;
-
   }
 
   .hero-content {
@@ -94,20 +82,14 @@
   }
 
   .hero-text {
-
     width: 70%;
 
     padding: 40px 0;
-
   }
-
 }
 
-
 @media (max-width: 767.98px) {
-
   .hero-background {
-
     min-height: 700px;
 
     /*
@@ -115,44 +97,34 @@
      * so text remains readable on mobile.
      */
     background-position: 65% center;
-
   }
 
   .hero-text {
-
     width: 100%;
 
     padding: 40px 20px;
-
   }
 
   .hero-text h1 {
-
     font-size: 2.5rem;
-
   }
 
   .hero-text p {
-
     font-size: 1rem;
-
   }
 
   .hero-stats {
-
     margin-top: 35px !important;
-
   }
 }
 
-  /* =========================
+/* =========================
    SHOP BY CATEGORY
 ========================= */
 
 .categories-section {
   background-color: #ffffff;
 }
-
 
 /* Section heading */
 
@@ -161,7 +133,6 @@
   font-weight: 700;
   color: #172b4d;
 }
-
 
 /* View all */
 
@@ -174,7 +145,6 @@
 .view-all-link:hover {
   color: #0a58ca;
 }
-
 
 /* Category card */
 
@@ -197,169 +167,117 @@
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease;
-
 }
-
 
 /* Hover */
 
 .category-card:hover {
-
   transform: translateY(-3px);
 
-  box-shadow:
-    0 6px 15px rgba(0, 0, 0, 0.08);
-
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
 }
-
 
 /* Icon */
 
 .category-icon {
-
   font-size: 1.9rem;
 
   line-height: 1;
-
 }
-
 
 /* Category name */
 
 .category-name {
-
   font-size: 0.8rem;
 
   font-weight: 600;
 
   color: #172b4d;
   text-align: center;
-
 }
-
 
 /* =========================
    CATEGORY COLORS
 ========================= */
 
-
 /* Fiction */
 
 .category-fiction {
-
   background-color: #fdecef;
-
 }
 
 .category-fiction .category-icon {
-
   color: #17324d;
-
 }
-
 
 /* Non Fiction */
 
 .category-nonfiction {
-
   background-color: #fff6e6;
-
 }
 
 .category-nonfiction .category-icon {
-
   color: #f4a900;
-
 }
-
 
 /* Self Help */
 
 .category-selfhelp {
-
   background-color: #eaf7ea;
-
 }
 
 .category-selfhelp .category-icon {
-
   color: #399653;
-
 }
-
 
 /* Business */
 
 .category-business {
-
   background-color: #e7f5ff;
-
 }
 
 .category-business .category-icon {
-
   color: #2694d8;
-
 }
-
 
 /* Technology */
 
 .category-technology {
-
   background-color: #eeeeff;
-
 }
 
 .category-technology .category-icon {
-
   color: #5145cd;
-
 }
-
 
 /* Children */
 
 .category-children {
-
   background-color: #fff5df;
-
 }
 
 .category-children .category-icon {
-
   color: #d99a18;
-
 }
-
 
 /* Comics */
 
 .category-comics {
-
   background-color: #fcebef;
-
 }
 
 .category-comics .category-icon {
-
   color: #dc263d;
-
 }
-
 
 /* Academic */
 
 .category-academic {
-
   background-color: #e4f8f6;
-
 }
 
 .category-academic .category-icon {
-
   color: #159a9c;
-
 }
 
 /*  AI  */
@@ -375,11 +293,9 @@
   font-size: x-small;
 }
 
-
 /* =========================
    PROMOTIONS
 ========================= */
-
 
 .promo-card {
   min-height: 280px;
@@ -391,23 +307,12 @@
 }
 
 .promo-discount {
-  background:
-    linear-gradient(
-      135deg,
-      #fff8ed,
-      #fff
-    );
+  background: linear-gradient(135deg, #fff8ed, #fff);
 }
 
 .promo-new {
-  background:
-    linear-gradient(
-      135deg,
-      #edf6ff,
-      #fff
-    );
+  background: linear-gradient(135deg, #edf6ff, #fff);
 }
-
 
 /* =========================
    FEATURES
@@ -428,7 +333,6 @@
 
   font-size: 1.5rem;
 }
-
 
 /* =========================
    NEWSLETTER
